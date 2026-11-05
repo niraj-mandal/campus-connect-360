@@ -1,7 +1,5 @@
 node_modules/
-data/
-.env
+# local SQLite database and organizer key (top-level only; public/data is site content)
+/data/
 .vercel/
-
-.vercel
 .env*
