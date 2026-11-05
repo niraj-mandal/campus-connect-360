@@ -3,38 +3,40 @@ const { $, $$, esc, pad, icon, api, post, toast, openModal, closeModal, field, s
 
 const IMG = (id) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=900&q=75`;
 
+const GMAP = (q) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q + ', Lovely Professional University, Phagwara')}`;
+
 const SERVICES = [
   {
     id: 'library', name: 'Library & Learning', icon: 'i-book', color: '#5b4632', img: IMG('photo-1521587760476-6c12a4b040da'),
-    desc: 'Books, e-journals, study rooms and 24/7 reading halls.',
-    about: 'The central library holds over 1.2 lakh books and gives you access to IEEE, Springer and JSTOR e-journals from anywhere on the campus network.',
-    location: 'Central Library, next to the Main Lawn', hours: 'Mon–Sat 8:00 AM – 10:00 PM · Sun 10:00 AM – 6:00 PM', contact: 'library@campus.edu · Ext. 2101',
-    offers: ['Borrow up to 6 books for 14 days', 'Bookable group study rooms', 'Printing, scanning and inter-library loans', 'Research help desk for theses and papers'],
-    place: 'library', ticket: 'Library', tags: 'books journals study room printing',
+    desc: 'Central library, reading halls and e-resources.',
+    about: 'LPU’s central library and reading halls serve every school on campus, with print collections and online journals for coursework and research.',
+    location: 'Central Library, LPU campus', contact: 'Library help desk · LPU helpline +91 1824 517000',
+    offers: ['Borrow and return books with your student ID', 'Reading halls for self-study', 'Online journals and e-books for research', 'Report a lost book through the Help Desk'],
+    map: GMAP('Central Library'), mapLabel: 'Find on Google Maps', ticket: 'Library', tags: 'books journals study reading',
   },
   {
     id: 'living', name: 'Campus Living', icon: 'i-bed', color: '#6a7a5a', img: IMG('photo-1562774053-701939374585'),
-    desc: 'Hostels, dining, laundry and residence support.',
-    about: 'Six residence halls with 24-hour security, a central mess serving four meals a day, and on-site laundry and maintenance teams.',
-    location: 'Hostel Blocks H1–H6, North Campus', hours: 'Warden office Mon–Sat 9:00 AM – 6:00 PM · Security 24/7', contact: 'hostel@campus.edu · Ext. 2300',
-    offers: ['Room allocation and transfers', 'Mess menu and special diets', 'Laundry pickup twice a week', 'Maintenance requests through the Help Desk'],
-    place: 'hostels', ticket: 'Hostel', tags: 'hostel mess dining laundry room',
+    desc: 'Hostels, food courts, Uni Mall and residence support.',
+    about: 'Separate boys’ and girls’ hostels on campus, with laundry, common rooms, gyms and canteens. Uni Mall and the food courts are a short walk away.',
+    location: 'Hostels and Uni Mall, LPU campus', contact: 'Hostel warden office · LPU helpline +91 1824 517000',
+    offers: ['Room allocation and hostel queries', 'Mess, canteens and Uni Mall food courts', 'Laundry and common rooms', 'Maintenance requests through the Help Desk'],
+    map: GMAP('LPU hostel'), mapLabel: 'Find hostels on Google Maps', ticket: 'Hostel', tags: 'hostel mess dining laundry room uni mall',
   },
   {
     id: 'tech', name: 'Technology & Labs', icon: 'i-laptop', color: '#2f3d4f', img: IMG('photo-1498050108023-c5249f4df085'),
-    desc: 'Computer labs, campus Wi-Fi and IT help desk.',
-    about: 'Five open computer labs with licensed software, campus-wide Wi-Fi and an IT help desk for accounts, email and device issues.',
-    location: 'Innovation Lab, Block C', hours: 'Labs Mon–Fri 8:00 AM – 9:00 PM · IT desk 9:00 AM – 6:00 PM', contact: 'it-help@campus.edu · Ext. 2450',
-    offers: ['Wi-Fi and student email accounts', 'MATLAB, AutoCAD and Adobe licences', '3D printing and maker space', 'Laptop repair guidance'],
-    place: 'block-c', ticket: 'IT & Wi-Fi', tags: 'wifi it computer software lab',
+    desc: 'Computer labs, campus Wi-Fi and IT support.',
+    about: 'Computer labs across the academic blocks, including the Lovely Institute of Technology, plus campus Wi-Fi and IT support for student accounts.',
+    location: 'Lovely Institute of Technology and academic blocks', contact: 'IT support desk · LPU helpline +91 1824 517000',
+    offers: ['Campus Wi-Fi and student account help', 'Lab access for coursework and projects', 'Software for engineering and design courses', 'Raise IT issues through the Help Desk'],
+    map: '/campus#lit', mapLabel: 'View on campus map', ticket: 'IT & Wi-Fi', tags: 'wifi it computer software lab',
   },
   {
     id: 'assist', name: 'Student Assistance', icon: 'i-users', color: '#55606a', img: IMG('photo-1522202176988-66273c2fd55f'),
-    desc: 'Counselling, mentoring and career guidance.',
-    about: 'Confidential counselling, peer mentoring and a career cell that runs placement prep, internships and resume reviews.',
-    location: 'Student Centre, First Floor', hours: 'Mon–Fri 9:00 AM – 5:00 PM · Counselling by appointment', contact: 'care@campus.edu · Ext. 2200',
-    offers: ['One-to-one counselling (confidential)', 'Peer mentors for first-year students', 'Scholarships and fee assistance', 'Placement prep and resume reviews'],
-    place: 'student-centre', ticket: 'Academics', tags: 'counselling career mentor scholarship placement',
+    desc: 'Student well-being, counselling and placements.',
+    about: 'LPU’s Student Well-Being office handles counselling and student concerns, and the Division of Career Services runs placements and career preparation.',
+    location: 'LPU campus', contact: 'Well-being +91 1824 520150 · dsr@lpu.co.in · Placements +91 1824 444500 · placement@lpu.co.in',
+    offers: ['Confidential counselling and well-being support', 'Placement drives and career preparation', 'Scholarship and fee guidance', 'Uni Hospital for medical help, round the clock'],
+    map: GMAP('Uni Hospital'), mapLabel: 'Find Uni Hospital', ticket: 'Academics', tags: 'counselling career placement wellbeing hospital',
   },
 ];
 window.CC_SERVICES = SERVICES;
@@ -46,7 +48,8 @@ const FAQS = [
   ['How do I report a hostel, Wi-Fi or fee problem?', 'Raise a ticket at the <a href="/help-desk">Help Desk</a>. You get a ticket ID to track progress and read replies from the team.'],
   ['How do I join a club?', 'Browse <a href="/clubs">Clubs &amp; Communities</a> and press “Request to join”. The club’s coordinators review requests every week.'],
   ['Where can I find exam dates and holidays?', 'The <a href="/notices">Notice Board</a> has every official announcement. Pinned notices are the most important.'],
-  ['What are the library and canteen timings?', 'See <a href="/campus">Campus Map &amp; Hours</a>. It shows which places are open right now.'],
+  ['Where is everything on the LPU campus?', 'Open the <a href="/campus">LPU Campus Map</a>. It has an interactive map, a Google Maps view with block numbers, key facilities and how to reach Phagwara.'],
+  ['Is this the official LPU website?', 'No. Campus Connect 360 is an independent student project. For admissions, fees and official notices use <a href="https://www.lpu.in" target="_blank" rel="noopener">lpu.in</a>.'],
 ];
 
 let EVENTS = [];
@@ -73,12 +76,11 @@ function openService(id) {
     <p class="lead">${esc(s.about)}</p>
     <dl class="detail-list">
       <dt>${icon('i-pin')} Where</dt><dd>${esc(s.location)}</dd>
-      <dt>${icon('i-clock')} Hours</dt><dd>${esc(s.hours)}</dd>
       <dt>${icon('i-mail')} Contact</dt><dd>${esc(s.contact)}</dd>
     </dl>
     <ul class="bullets">${s.offers.map((o) => `<li>${esc(o)}</li>`).join('')}</ul>
     <div class="btn-row">
-      <a class="btn btn-dark btn-sm" href="/campus#${s.place}">${icon('i-map')} View on map</a>
+      <a class="btn btn-dark btn-sm" href="${s.map}"${s.map.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}>${icon('i-map')} ${esc(s.mapLabel)}</a>
       <a class="btn btn-outline btn-sm" href="/help-desk?category=${encodeURIComponent(s.ticket)}">${icon('i-ticket')} Raise a ticket</a>
     </div>`);
 }

@@ -42,7 +42,8 @@
     { label: 'Notice Board', kind: 'Page', text: 'announcements exams holidays deadlines', href: '/notices' },
     { label: 'Lost & Found', kind: 'Page', text: 'lost found items report claim', href: '/lost-found' },
     { label: 'Help Desk', kind: 'Page', text: 'ticket support hostel it wifi fees complaint track', href: '/help-desk' },
-    { label: 'Campus Map & Hours', kind: 'Page', text: 'map buildings opening hours timings canteen library', href: '/campus' },
+    { label: 'LPU Campus Map', kind: 'Page', text: 'map buildings directions unipolis uni mall hospital hostel railway station airport phagwara law gate', href: '/campus' },
+    { label: 'About LPU & contacts', kind: 'Page', text: 'lovely professional university naac nirf helpline phone email address', href: '/campus#about-title' },
     { label: 'Register for an Event', kind: 'Page', text: 'registration sign up', href: '/#register' },
     { label: 'Manage my registration', kind: 'Page', text: 'cancel booking confirmation calendar', href: '/#manage' },
     { label: 'FAQs', kind: 'Page', text: 'questions help', href: '/#faq' },
@@ -257,7 +258,7 @@
         </div>
         <div>
           <h4>Platform</h4>
-          <a href="/">Home</a><a href="/#services">Services</a><a href="/#events">Events</a><a href="/#register">Registration</a><a href="/campus">Campus Map</a>
+          <a href="/">Home</a><a href="/#services">Services</a><a href="/#events">Events</a><a href="/#register">Registration</a><a href="/campus">LPU Campus Map</a>
         </div>
         <div>
           <h4>Student Services</h4>
@@ -279,7 +280,7 @@
       </div>
       <div class="container footer-bottom">
         <span>© ${new Date().getFullYear()} Campus Connect 360. All rights reserved.</span>
-        <span>Demo Project <i>|</i> University Campus Platform</span>
+        <span>Student project for LPU <i>|</i> Not an official Lovely Professional University website · <a href="https://www.lpu.in" target="_blank" rel="noopener" style="text-decoration:underline">lpu.in</a></span>
       </div>`;
     }
 

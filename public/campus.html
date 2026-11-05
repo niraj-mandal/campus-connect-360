@@ -3,11 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Campus Map & Hours · Campus Connect 360</title>
-  <meta name="description" content="Campus map with key buildings and live opening hours.">
+  <title>LPU Campus Map · Campus Connect 360</title>
+  <meta name="description" content="Interactive map of the Lovely Professional University campus in Phagwara, key facilities, facts and how to get there.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin>
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/components.css">
   <script>
@@ -20,27 +21,76 @@
     <section class="page-head">
       <div class="container">
         <p class="crumbs"><a href="/">Home</a> / Campus Map</p>
-        <h1>Campus Map &amp; Hours</h1>
-        <p class="lead">Find your way around and see what’s open right now. Tap a building for details.</p>
+        <h1>LPU Campus Map</h1>
+        <p class="lead">Lovely Professional University, Jalandhar–Delhi G.T. Road, Phagwara, Punjab 144411. Explore the campus, find facilities and plan your trip.</p>
+        <div class="btn-row">
+          <a class="btn btn-dark btn-sm" href="https://www.google.com/maps/dir/?api=1&destination=Lovely+Professional+University,+Phagwara" target="_blank" rel="noopener"><svg><use href="#i-map"/></svg> Directions to LPU</a>
+          <a class="btn btn-outline btn-sm" href="https://www.openstreetmap.org/relation/21599790" target="_blank" rel="noopener">View on OpenStreetMap</a>
+        </div>
       </div>
     </section>
 
     <section class="container section">
+      <div class="map-views" role="tablist" aria-label="Map view" id="map-views">
+        <button class="chip-btn active" role="tab" aria-selected="true" data-view="osm">Interactive map</button>
+        <button class="chip-btn" role="tab" aria-selected="false" data-view="google">Google Maps (labelled blocks)</button>
+        <button class="chip-btn" role="tab" aria-selected="false" data-view="satellite">Satellite</button>
+      </div>
       <div class="map-wrap">
-        <div class="map-card"><svg class="campus-map" id="campus-map" viewBox="0 0 800 560" role="group" aria-label="Campus map"></svg></div>
-        <aside class="form-card place-panel" id="place-panel" aria-live="polite"></aside>
+        <div class="map-card">
+          <div id="lpu-map" class="lpu-map" aria-label="Interactive map of the LPU campus"></div>
+          <iframe id="google-map" class="lpu-map" title="Google Maps view of LPU" hidden loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <p class="map-note">Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors. The outline is LPU’s campus boundary as mapped on OpenStreetMap. For block numbers, use the Google Maps view or <a href="https://www.google.com/maps/search/?api=1&query=Lovely+Professional+University,+Phagwara" target="_blank" rel="noopener">open LPU in Google Maps</a>.</p>
+        </div>
+        <aside class="form-card place-panel" aria-label="Places">
+          <p class="eyebrow">Places</p>
+          <label class="search-field" style="min-width:0;flex:none"><svg><use href="#i-search"/></svg><input id="place-search" type="search" placeholder="Search places" aria-label="Search places"></label>
+          <div id="place-groups"></div>
+        </aside>
       </div>
     </section>
 
-    <section class="container section" style="padding-top:0" aria-labelledby="hours-title">
+    <section class="container section" style="padding-top:0" aria-labelledby="fac-title">
       <div class="section-head">
-        <div><p class="eyebrow">Opening Hours</p><h2 id="hours-title">What’s open</h2></div>
-        <p class="muted" id="now-label" style="margin:0;font-size:13.5px"></p>
+        <div><p class="eyebrow">On campus</p><h2 id="fac-title">Key facilities</h2>
+        <p class="lead">Figures are as reported by public sources. Use “Find on map” to open the exact spot in Google Maps.</p></div>
       </div>
-      <div class="table-scroll"><table class="hours-table" id="hours-table"></table></div>
+      <div class="card-grid" id="facilities"></div>
+    </section>
+
+    <section class="container section split" style="padding-top:0" aria-labelledby="about-title">
+      <div>
+        <p class="eyebrow">About LPU</p>
+        <h2 id="about-title" class="section-title">Lovely Professional University</h2>
+        <p class="lead" style="max-width:none">A private state university in Phagwara, Punjab, established under the Lovely Professional University Act, 2005, with classes from 2006.</p>
+        <dl class="detail-list" id="facts"></dl>
+        <p class="muted" style="font-size:12.5px">Sources:
+          <a class="text-link" href="https://en.wikipedia.org/wiki/Lovely_Professional_University" target="_blank" rel="noopener">Wikipedia</a> ·
+          <a class="text-link" href="https://www.lpu.in/contact-us/" target="_blank" rel="noopener">LPU contact page</a> ·
+          <a class="text-link" href="https://www.tribuneindia.com/news/jalandhar/lpu-gets-naac-grade-a-537071" target="_blank" rel="noopener">The Tribune (NAAC)</a> ·
+          <a class="text-link" href="https://www.careers360.com/articles/lpu-infrastructure-campus-area-hostels-libraries" target="_blank" rel="noopener">Careers360 (facilities)</a>.
+          Check <a class="text-link" href="https://www.lpu.in" target="_blank" rel="noopener">lpu.in</a> for the latest.</p>
+      </div>
+      <div>
+        <div class="form-card">
+          <h3>Getting here</h3>
+          <p>Distances are approximate, from LPU’s visitor pages.</p>
+          <div class="reach" id="reach"></div>
+        </div>
+        <div class="form-card" style="margin-top:16px">
+          <h3>Official contacts</h3>
+          <p>From the LPU contact page.</p>
+          <dl class="detail-list" style="margin:0" id="contacts"></dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="container" style="padding-bottom:56px">
+      <p class="disclaimer">Campus Connect 360 is an independent student project for LPU students. It is not an official Lovely Professional University website. For admissions, fees and official notices, use <a href="https://www.lpu.in" target="_blank" rel="noopener">lpu.in</a> and LPU’s own student portal.</p>
     </section>
   </main>
   <footer id="site-footer"></footer>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin></script>
   <script src="/common.js"></script>
   <script src="/campus.js"></script>
 </body>

@@ -18,10 +18,18 @@ npm run dev      # same, restarts on file changes
 | `/notices` | Official announcements, pinned first, filter and search |
 | `/lost-found` | Report lost or found items, reply to a post without seeing the poster's email, manage your post (read replies, mark returned) with its post ID |
 | `/help-desk` | Raise a ticket (hostel, IT, library, fees…), track it with the ticket ID and read replies |
-| `/campus` | Interactive campus map and live opening hours ("open now / closes at…") |
+| `/campus` | LPU campus map: interactive OpenStreetMap map with the real campus boundary and pins, Google Maps and satellite views, key facilities, facts about LPU, official contacts and how to reach Phagwara |
 | `/admin` | Organizer dashboard (key required): registrations + CSV export, create/delete events, post/pin notices, approve club requests, moderate lost & found, update tickets with replies, read contact messages |
 
 Every page has search (press `/`), dark mode, and a phone layout.
+
+## LPU information
+
+Campus Connect 360 is an independent student project for Lovely Professional University; it is not an official LPU site (the footer and campus page say so).
+
+- Map pins and the campus outline come from OpenStreetMap (relation 21599790, ODbL). Only places that are mapped there get a pin; other facilities link to a Google Maps search. `public/data/lpu-boundary.json` is the boundary.
+- Facts, contacts and travel distances on `/campus` come from LPU’s contact and visitor pages, Wikipedia, and news reports of the NAAC grade (sources are linked on the page). Re-check them on lpu.in before relying on them.
+- The three starter events, the 12 clubs and the starter notices are sample content. Replace them from `/admin` (events, notices) or `lib/db.js` (clubs).
 
 ## Data
 
