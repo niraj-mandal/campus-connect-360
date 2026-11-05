@@ -287,22 +287,34 @@ document.addEventListener('click', (ev) => {
 });
 
 // ---------- Stats ----------
-function animateCount(el, target) {
-  const suffix = el.dataset.suffix || '';
-  const from = parseInt(el.textContent, 10) || 0;
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches || from === target) { el.textContent = pad(target) + suffix; return; }
-  const start = performance.now(), dur = 900;
-  const tick = (t) => {
-    const p = Math.min(1, (t - start) / dur);
-    el.textContent = pad(Math.round(from + (target - from) * (1 - Math.pow(1 - p, 3)))) + suffix;
-    if (p < 1) requestAnimationFrame(tick);
-  };
-  requestAnimationFrame(tick);
+// Odometer: each digit is a 0–9 column that slides to its value. Rolls when the strip is on screen.
+const DIGITS = [...'0123456789'].map((d) => `<span>${d}</span>`).join('');
+function rollTo(el, value) {
+  const text = pad(value) + (el.dataset.suffix || '');
+  el.setAttribute('aria-label', text);
+  if (el.dataset.len !== String(text.length)) {
+    el.dataset.len = text.length;
+    el.innerHTML = [...text].map((ch) => (/\d/.test(ch) ? `<span class="odo" aria-hidden="true"><span class="odo-col">${DIGITS}</span></span>` : `<span aria-hidden="true">${ch}</span>`)).join('');
+    void el.offsetWidth; // start from 0 so the first roll is visible
+  }
+  [...text].filter((ch) => /\d/.test(ch)).forEach((d, k) => {
+    const col = el.querySelectorAll('.odo-col')[k];
+    col.style.transitionDelay = `${k * 120}ms`;
+    col.style.transform = `translateY(-${Number(d) * 10}%)`;
+  });
 }
+let statValues = null, statsSeen = false;
+const statsStrip = $('.stats');
+const showStats = () => { if (statsSeen && statValues) $$('[data-count]').forEach((el) => { const v = statValues[el.dataset.count]; if (typeof v === 'number') rollTo(el, v); }); };
+new IntersectionObserver((entries, obs) => {
+  if (!entries[0].isIntersecting) return;
+  statsSeen = true; statsStrip.classList.add('in'); showStats(); obs.disconnect();
+}, { threshold: 0.4 }).observe(statsStrip);
 async function loadStats() {
   const r = await api('/api/stats').catch(() => null);
   if (!r?.ok) return;
-  $$('[data-count]').forEach((el) => { const v = r.body[el.dataset.count]; if (typeof v === 'number') animateCount(el, v); });
+  statValues = r.body;
+  showStats();
 }
 
 // ---------- Registration ----------

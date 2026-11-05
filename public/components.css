@@ -234,6 +234,20 @@ a.notice:hover { border-color: var(--text); }
 
 .hero-eyebrow { font-size: 12px !important; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; margin: 0 0 16px !important; opacity: .85; }
 
+/* Stats strip: odometer digits + staggered rise */
+.stat strong { display: flex; line-height: 1.15; }
+.stat strong span { font-size: inherit; color: inherit; } /* undo the label style from .stat span */
+.odo { display: inline-block; height: 1.15em; overflow: hidden; }
+.odo-col { display: flex; flex-direction: column; transition: transform 1.4s cubic-bezier(.2,.9,.25,1); }
+.odo-col > span { height: 1.15em; }
+.stats .stat { opacity: 0; transform: translateY(14px); }
+.stats.in .stat { animation: statIn .6s cubic-bezier(.2,.8,.2,1) forwards; }
+.stats.in .stat:nth-child(2) { animation-delay: .1s; } .stats.in .stat:nth-child(3) { animation-delay: .2s; } .stats.in .stat:nth-child(4) { animation-delay: .3s; }
+@keyframes statIn { to { opacity: 1; transform: none; } }
+.stat { transition: transform .25s; }
+.stat:hover strong { color: var(--accent); }
+@media (prefers-reduced-motion: reduce) { .odo-col { transition: none; } .stats .stat { opacity: 1; transform: none; animation: none !important; } }
+
 /* Hero: background slideshow of event photos (under the dark overlay from .hero::after) */
 .hero-slides { position: absolute; inset: 0; }
 .hero-slide { position: absolute; inset: 0; background: center / cover no-repeat; opacity: 0; transform: scale(1.08); transition: opacity 1.2s ease, transform 7s ease-out; }
