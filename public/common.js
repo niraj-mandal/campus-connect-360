@@ -240,6 +240,10 @@
         </nav>
         <div class="header-actions">
           <button class="icon-btn" id="search-open" aria-label="Search (press /)">${icon('i-search')}</button>
+          <div class="notif-wrap">
+            <button class="icon-btn" id="notif-btn" aria-label="Notifications" aria-expanded="false" aria-controls="notif-panel">${icon('i-bell')}<span class="notif-count" id="notif-count" hidden></span></button>
+            <div class="notif-panel" id="notif-panel" role="dialog" aria-label="Notifications" hidden></div>
+          </div>
           <button class="icon-btn" id="theme-toggle" aria-label="Toggle dark mode">${icon('i-moon')}</button>
           <a class="btn btn-dark btn-sm header-cta" href="/campus">Explore Campus ${icon('i-arrow-up')}</a>
           <button class="icon-btn menu-btn" id="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="main-nav">${icon('i-menu')}</button>
@@ -400,12 +404,56 @@
     });
   }
 
+  // ---------- Notifications (latest notices; "seen" is remembered per browser) ----------
+  function initNotifications() {
+    const btn = $('#notif-btn'), panel = $('#notif-panel'), badge = $('#notif-count');
+    if (!btn) return;
+    const KEY = 'cc-notices-seen';
+    const loadSeen = () => { try { return new Set(JSON.parse(localStorage.getItem(KEY)) || []); } catch { return new Set(); } };
+    const saveSeen = (ids) => { try { localStorage.setItem(KEY, JSON.stringify(ids)); } catch { /* ignore */ } };
+    let notices = [];
+
+    const setBadge = () => {
+      const seen = loadSeen();
+      const n = notices.filter((x) => !seen.has(x.id)).length;
+      badge.hidden = !n;
+      badge.textContent = n > 9 ? '9+' : n;
+      btn.setAttribute('aria-label', n ? `Notifications, ${n} new` : 'Notifications');
+    };
+    const markAllSeen = () => { saveSeen(notices.map((x) => x.id)); setBadge(); };
+
+    const render = () => {
+      const seen = loadSeen();
+      panel.innerHTML = `
+        <div class="notif-head"><strong>Notifications</strong><a href="/notices">View all</a></div>
+        ${notices.length ? `<ul class="notif-list">${notices.slice(0, 5).map((n) => `
+          <li><a href="/notices#notice-${n.id}" class="${seen.has(n.id) ? '' : 'unread'}">
+            <span class="notif-top">${n.pinned ? `<span class="badge badge-info">${icon('i-star')}Pinned</span>` : ''}<span class="badge">${esc(n.category)}</span><time>${timeAgo(n.created_at)}</time></span>
+            <b>${esc(n.title)}</b><span class="notif-body">${esc(n.body)}</span>
+          </a></li>`).join('')}</ul>` : '<p class="notif-empty">No notifications yet.</p>'}
+        <a class="notif-all" href="/notices">View all notices ${icon('i-arrow')}</a>`;
+    };
+
+    const open = () => { render(); panel.hidden = false; btn.setAttribute('aria-expanded', 'true'); markAllSeen(); panel.querySelector('a')?.focus(); };
+    const close = (focus) => { if (panel.hidden) return; panel.hidden = true; btn.setAttribute('aria-expanded', 'false'); if (focus) btn.focus(); };
+    btn.addEventListener('click', () => (panel.hidden ? open() : close()));
+    document.addEventListener('click', (e) => { if (!e.target.closest('.notif-wrap')) close(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(true); });
+
+    api('/api/notices').then((r) => {
+      if (!r.ok) return;
+      notices = r.body;
+      if (page === 'notices') markAllSeen(); else setBadge();
+    }).catch(() => {});
+  }
+
   window.CC = { $, $$, esc, pad, icon, api, post, toast, openModal, closeModal, field, setError, bindForm, showMsg, rules, dateParts, fmtDay, fmtTime, fmtWhen, timeAgo, downloadIcs, reveal, chips, page, MONTHS };
 
   renderShell();
   initTheme();
   initMenu();
   initSearch();
+  initNotifications();
   document.addEventListener('DOMContentLoaded', () => reveal());
   if (document.readyState !== 'loading') reveal();
 })();

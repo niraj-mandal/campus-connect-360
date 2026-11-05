@@ -207,21 +207,6 @@ async function loadStats() {
   $$('[data-count]').forEach((el) => { const v = r.body[el.dataset.count]; if (typeof v === 'number') animateCount(el, v); });
 }
 
-// ---------- Notices preview ----------
-async function loadNotices() {
-  const box = $('#notice-strip');
-  box.innerHTML = '<div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>';
-  const r = await api('/api/notices').catch(() => null);
-  if (!r?.ok) { box.innerHTML = '<p class="muted">Notices could not be loaded.</p>'; return; }
-  const items = r.body.slice(0, 3);
-  box.innerHTML = items.length ? items.map((n) => `
-    <a class="notice${n.pinned ? ' pinned' : ''}" href="/notices#notice-${n.id}">
-      <div class="notice-top">${n.pinned ? `<span class="badge badge-info">${icon('i-star')}Pinned</span>` : ''}<span class="badge">${esc(n.category)}</span><time datetime="${esc(n.created_at)}">${CC.timeAgo(n.created_at)}</time></div>
-      <h3>${esc(n.title)}</h3>
-      <p>${esc(n.body)}</p>
-    </a>`).join('') : '<div class="empty-state"><strong>No notices yet</strong>New announcements will appear here.</div>';
-}
-
 // ---------- Registration ----------
 const regForm = $('#reg-form');
 const regSuccess = $('#reg-success');
@@ -361,5 +346,4 @@ reveal();
 loadTileStats();
 loadEvents();
 loadStats();
-loadNotices();
 if (location.hash.startsWith('#svc-') || location.hash === '#manage') handleHash();
