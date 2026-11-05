@@ -133,6 +133,7 @@ const PANELS = {
             ${field({ name: 'start_time', label: 'Start time', type: 'time', value: '10:00' })}
             ${field({ name: 'venue', label: 'Venue', attrs: 'maxlength="80"' })}
             ${field({ name: 'capacity', label: 'Seats', type: 'number', value: '200', attrs: 'min="1" max="10000"' })}
+            ${field({ name: 'image', label: 'Photo link', type: 'url', optional: true, full: true, placeholder: 'https://…', hint: 'Shown in the home page hero slideshow. Use a wide photo of the event or venue.' })}
           </div>
           <button class="btn btn-dark btn-sm" type="submit">Create event</button>
         </form>
@@ -147,6 +148,7 @@ const PANELS = {
         title: rules.length(3, 80, 'Title'), description: rules.length(10, 200, 'Description'), starts_on: rules.required('Pick a date.'),
         start_time: rules.required('Pick a time.'), venue: rules.length(2, 80, 'Venue'),
         capacity: (v) => /^\d+$/.test(v) && +v >= 1 && +v <= 10000 ? '' : 'Seats must be 1–10000.',
+        image: (v) => !v || /^https:\/\/\S+$/.test(v) ? '' : 'Use an https:// link.',
       },
       submit: (data) => send('/api/admin/events', 'POST', { ...data, capacity: Number(data.capacity) }),
       onSuccess: (ev) => { toast(`“${ev.title}” is live on the home page`); refresh(); },

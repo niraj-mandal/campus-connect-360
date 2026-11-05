@@ -234,6 +234,12 @@ a.notice:hover { border-color: var(--text); }
 
 .hero-eyebrow { font-size: 12px !important; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; margin: 0 0 16px !important; opacity: .85; }
 
+/* Hero: background slideshow of event photos (under the dark overlay from .hero::after) */
+.hero-slides { position: absolute; inset: 0; }
+.hero-slide { position: absolute; inset: 0; background: center / cover no-repeat; opacity: 0; transform: scale(1.08); transition: opacity 1.2s ease, transform 7s ease-out; }
+.hero-slide.on { opacity: 1; transform: scale(1); }
+@media (prefers-reduced-motion: reduce) { .hero-slide { transition: opacity .4s; transform: none; } }
+
 /* Hero: rotating event card */
 .hero-events { position: absolute; z-index: 3; right: max(16px, calc((100% - 1180px) / 2)); bottom: 40px; width: 360px; padding: 18px 18px 14px; border-radius: 18px; overflow: hidden;
   color: #fff; background: rgba(20, 20, 22, .42); border: 1px solid rgba(255,255,255,.22); backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2); box-shadow: 0 20px 50px rgba(0,0,0,.28); }

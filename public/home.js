@@ -93,8 +93,31 @@ const heroEvents = (() => {
   const DELAY = 5000;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let i = 0, timer = null, paused = false;
+  // Slide 0 is the campus photo with a "this week" summary; slides 1..n are events with their own photo.
+  const count = () => EVENTS.length + 1;
+  const bgs = document.createElement('div');
+  bgs.className = 'hero-slides';
+  bgs.setAttribute('aria-hidden', 'true');
+  $('.hero-bg').after(bgs);
+
+  const summary = () => {
+    const next = EVENTS[0];
+    const { day, month } = dateParts(next.starts_on);
+    return `
+      <div class="he-date"><strong>${EVENTS.length}</strong><span>EVENTS</span></div>
+      <div class="he-info">
+        <p class="he-eyebrow">This month at LPU</p>
+        <h3>${EVENTS.length} upcoming event${EVENTS.length > 1 ? 's' : ''} on campus</h3>
+        <p class="he-meta">Next: ${esc(next.title)} · ${day} ${month}</p>
+        <div class="he-foot">
+          <span class="he-seats">${EVENTS.reduce((n, e) => n + e.seats_left, 0).toLocaleString()} seats open</span>
+          <a class="btn btn-light btn-sm" href="#events">See events ${icon('i-arrow')}</a>
+        </div>
+      </div>`;
+  };
 
   const slide = (e) => {
+    if (!e) return summary();
     const { day, month } = dateParts(e.starts_on);
     return `
       <div class="he-date"><strong>${day}</strong><span>${month}</span></div>
@@ -111,26 +134,38 @@ const heroEvents = (() => {
 
   function show(n) {
     if (!EVENTS.length) return;
-    i = (n + EVENTS.length) % EVENTS.length;
+    i = (n + count()) % count();
+    const ev = i ? EVENTS[i - 1] : null;
     const stage = box.querySelector('.he-slide');
     stage.classList.remove('in');
     void stage.offsetWidth; // restart the enter animation
-    stage.innerHTML = slide(EVENTS[i]);
+    stage.innerHTML = slide(ev);
     stage.classList.add('in');
+    // Cross-fade the hero background; events without a photo keep the campus photo.
+    bgs.querySelectorAll('.hero-slide').forEach((s) => s.classList.toggle('on', !!ev && s.dataset.id === ev.id));
     box.querySelectorAll('.he-dot').forEach((d, k) => d.setAttribute('aria-current', k === i ? 'true' : 'false'));
     const bar = box.querySelector('.he-progress');
     bar.classList.remove('run'); void bar.offsetWidth; if (timer) bar.classList.add('run');
   }
-  function start() { stop(); if (reduce || paused || EVENTS.length < 2) return; timer = setInterval(() => show(i + 1), DELAY); box.querySelector('.he-progress').classList.add('run'); }
+  function start() { stop(); if (reduce || paused) return; timer = setInterval(() => show(i + 1), DELAY); box.querySelector('.he-progress').classList.add('run'); }
   function stop() { clearInterval(timer); timer = null; box.querySelector('.he-progress')?.classList.remove('run'); }
 
   function render() {
-    if (!EVENTS.length) { box.hidden = true; stop(); return; }
-    const keep = EVENTS[i] ? i : 0;
+    if (!EVENTS.length) { box.hidden = true; stop(); bgs.innerHTML = ''; return; }
+    const keep = i < count() ? i : 0;
+    bgs.innerHTML = '';
+    for (const e of EVENTS.filter((x) => x.image)) {
+      const s = document.createElement('div');
+      s.className = 'hero-slide';
+      s.dataset.id = e.id;
+      s.style.backgroundImage = `url(${JSON.stringify(e.image)})`; // URL is validated server-side (no quotes/parens)
+      bgs.append(s);
+      new Image().src = e.image; // preload so the cross-fade doesn't flash
+    }
     box.innerHTML = `
       <div class="he-slide" aria-live="${reduce ? 'polite' : 'off'}"></div>
       <div class="he-controls">
-        <div class="he-dots">${EVENTS.map((e, k) => `<button type="button" class="he-dot" data-dot="${k}" aria-label="Show ${esc(e.title)}"></button>`).join('')}</div>
+        <div class="he-dots"><button type="button" class="he-dot" data-dot="0" aria-label="Show campus overview"></button>${EVENTS.map((e, k) => `<button type="button" class="he-dot" data-dot="${k + 1}" aria-label="Show ${esc(e.title)}"></button>`).join('')}</div>
         <a class="he-all" href="#events">All events</a>
       </div>
       <span class="he-progress" style="--d:${DELAY}ms"></span>`;
