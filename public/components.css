@@ -63,12 +63,24 @@ html.modal-open { overflow: hidden; }
 /* Home: service cards as buttons + more services */
 .service-card { cursor: pointer; border: 0; text-align: left; font: inherit; width: 100%; scroll-margin-top: 90px; }
 .more-services { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; padding-bottom: 40px; }
-.svc-tile { display: flex; flex-direction: column; gap: 10px; padding: 18px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); transition: transform .2s, border-color .2s; }
-.svc-tile:hover { transform: translateY(-2px); border-color: var(--text); }
-.svc-tile .ico { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; background: var(--surface-2); }
+.svc-tile { position: relative; overflow: hidden; isolation: isolate; display: flex; flex-direction: column; gap: 10px; padding: 18px 18px 16px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); transition: transform .25s cubic-bezier(.2,.8,.2,1), border-color .2s, box-shadow .25s; }
+/* Spotlight follows the pointer (--mx/--my set in home.js). */
+.svc-tile::before { content: ""; position: absolute; inset: 0; z-index: -1; opacity: 0; transition: opacity .25s;
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 0%), color-mix(in srgb, var(--accent) 14%, transparent), transparent 70%); }
+.svc-tile:hover, .svc-tile:focus-visible { transform: translateY(-4px); border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); box-shadow: 0 14px 34px rgba(0,0,0,.08); }
+.svc-tile:hover::before, .svc-tile:focus-visible::before { opacity: 1; }
+.svc-tile:active { transform: translateY(-1px) scale(.985); }
+.svc-tile .ico { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; background: var(--surface-2); transition: background .25s, color .25s, transform .35s cubic-bezier(.2,.8,.2,1); }
+.svc-tile:hover .ico, .svc-tile:focus-visible .ico { background: var(--dark); color: var(--on-dark); transform: scale(1.08) rotate(-6deg); }
 .svc-tile .ico svg { width: 20px; height: 20px; }
 .svc-tile strong { font-size: 14.5px; font-weight: 650; }
 .svc-tile span { font-size: 12.5px; color: var(--muted); }
+.tile-stat { margin-top: auto; padding-top: 4px; font-style: normal; font-size: 12px; font-weight: 600; color: var(--accent); display: inline-flex; align-items: center; gap: 6px; }
+.tile-stat.live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok) 60%, transparent); animation: pulse 2s infinite; }
+@keyframes pulse { 70% { box-shadow: 0 0 0 6px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+.tile-go { position: absolute; right: 16px; top: 18px; width: 18px; height: 18px; opacity: 0; transform: translateX(-6px); transition: opacity .2s, transform .25s; }
+.svc-tile:hover .tile-go, .svc-tile:focus-visible .tile-go { opacity: 1; transform: none; }
+@media (hover: none) { .tile-go { opacity: .5; transform: none; } }
 
 /* Events (extra meta) */
 .event-item { scroll-margin-top: 90px; }

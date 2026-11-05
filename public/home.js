@@ -347,8 +347,25 @@ const spy = new IntersectionObserver((entries) => {
 }, { rootMargin: '-45% 0px -50% 0px' });
 ['home', 'services', 'events'].forEach((id) => spy.observe(document.getElementById(id)));
 
+// ---------- Service tiles: pointer spotlight + live counts ----------
+$('#more-services').addEventListener('pointermove', (e) => {
+  const t = e.target.closest('.svc-tile');
+  if (!t) return;
+  const r = t.getBoundingClientRect();
+  t.style.setProperty('--mx', `${e.clientX - r.left}px`);
+  t.style.setProperty('--my', `${e.clientY - r.top}px`);
+});
+async function loadTileStats() {
+  const [clubs, notices, lost] = await Promise.all(['/api/clubs', '/api/notices', '/api/lost-found'].map((p) => api(p).then((r) => (r.ok ? r.body : null)).catch(() => null)));
+  const set = (key, text) => { const el = document.querySelector(`[data-tile="${key}"]`); if (el) { el.textContent = text; el.classList.add('live'); } };
+  if (clubs) set('clubs', `${clubs.length} clubs · ${clubs.reduce((n, c) => n + c.members, 0).toLocaleString()} members`);
+  if (notices) set('notices', `${notices.length} notices · ${notices.filter((n) => n.pinned).length} pinned`);
+  if (lost) set('lost', lost.length ? `${lost.length} open post${lost.length > 1 ? 's' : ''}` : 'No open posts · report one');
+}
+
 // ---------- Boot ----------
 reveal();
+loadTileStats();
 loadEvents();
 loadStats();
 loadNotices();
