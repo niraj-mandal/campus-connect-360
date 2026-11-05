@@ -1,4 +1,4 @@
-// Home page: services, events, notices preview, registration, manage booking, FAQ, contact.
+// Home page: services, events, registration, manage booking, FAQ.
 const { $, $$, esc, pad, icon, api, post, toast, openModal, closeModal, field, setError, bindForm, rules, dateParts, fmtDay, fmtTime, downloadIcs, reveal } = CC;
 
 const IMG = (id) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=900&q=75`;
@@ -293,24 +293,6 @@ $('#manage-open').addEventListener('click', openManage);
 $('#faq-list').innerHTML = FAQS.map(([q, a], i) => `
   <details${i === 0 ? ' open' : ''}><summary>${esc(q)} ${icon('i-chevron')}</summary><p>${a}</p></details>`).join('');
 $('#faq-list').addEventListener('click', (e) => { if (e.target.closest('[data-open-manage]')) { e.preventDefault(); openManage(); } });
-
-// ---------- Contact ----------
-const contact = $('#contact-form');
-contact.innerHTML = `
-  <h3>Send a message</h3>
-  <p>We read every message. For problems that need fixing, the Help Desk is faster.</p>
-  <div class="form-grid">
-    ${field({ name: 'name', label: 'Full Name', placeholder: 'Your name', attrs: 'autocomplete="name"' })}
-    ${field({ name: 'email', label: 'Email Address', type: 'email', placeholder: 'student@university.edu', attrs: 'autocomplete="email"' })}
-    ${field({ name: 'topic', label: 'Topic', options: ['General', 'Services', 'Events', 'Technical'], placeholder: 'Choose a topic', full: true })}
-    ${field({ name: 'body', label: 'Message', rows: 5, placeholder: 'How can we help?', full: true, attrs: 'maxlength="1000"' })}
-  </div>
-  <button class="btn btn-dark btn-block" type="submit">Send message ${icon('i-arrow')}</button>`;
-bindForm(contact, {
-  rules: { name: rules.name, email: rules.email, topic: rules.required('Please choose a topic.'), body: rules.length(10, 1000, 'Your message') },
-  submit: (data) => post('/api/messages', data),
-  onSuccess: (b, form, data) => { CC.showMsg(form, `Thanks, ${data.name.split(' ')[0]}! Your message has been sent. We’ll reply to ${data.email}.`); form.reset(); },
-});
 
 // ---------- Deep links (#svc-…, #evt-…) ----------
 function handleHash() {

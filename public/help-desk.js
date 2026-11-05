@@ -1,6 +1,6 @@
 const { $, esc, icon, post, field, bindForm, rules, fmtWhen, toast, showMsg } = CC;
 
-const CATS = ['Hostel', 'IT & Wi-Fi', 'Library', 'Fees', 'Academics', 'Other'];
+const CATS = ['Hostel', 'IT & Wi-Fi', 'Library', 'Fees', 'Academics', 'General & feedback', 'Other'];
 const STEPS = [['open', 'Received'], ['in_progress', 'In progress'], ['resolved', 'Resolved']];
 const preset = new URLSearchParams(location.search).get('category');
 
@@ -8,7 +8,7 @@ const preset = new URLSearchParams(location.search).get('category');
 const ticketForm = $('#ticket-form');
 ticketForm.innerHTML = `
   <h2>Raise a ticket</h2>
-  <p>Describe the problem clearly. You’ll get a ticket ID to track it.</p>
+  <p>Describe the problem, question or idea clearly. You’ll get a ticket ID to track it.</p>
   <div class="form-grid">
     ${field({ name: 'name', label: 'Full Name', placeholder: 'Your name', attrs: 'autocomplete="name"' })}
     ${field({ name: 'reg', label: 'Registration Number', placeholder: 'e.g. 22BCS1045', attrs: 'autocomplete="off"' })}

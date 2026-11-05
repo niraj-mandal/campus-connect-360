@@ -47,7 +47,7 @@
     { label: 'Register for an Event', kind: 'Page', text: 'registration sign up', href: '/#register' },
     { label: 'Manage my registration', kind: 'Page', text: 'cancel booking confirmation calendar', href: '/#manage' },
     { label: 'FAQs', kind: 'Page', text: 'questions help', href: '/#faq' },
-    { label: 'Contact Us', kind: 'Page', text: 'message email support', href: '/#contact' },
+    { label: 'Contact LPU', kind: 'Page', text: 'contact us phone helpline email address support', href: '/campus#contacts' },
   ];
 
   // ---------- Helpers ----------
@@ -270,7 +270,7 @@
         </div>
         <div>
           <h4>Support</h4>
-          <a href="#" data-action="assistant">Campus Assistant</a><a href="/#contact">Contact Us</a><a href="/#faq">Help &amp; FAQs</a><a href="/admin">Organizers</a>
+          <a href="#" data-action="assistant">Campus Assistant</a><a href="/campus#contacts">Contact LPU</a><a href="/#faq">Help &amp; FAQs</a><a href="/admin">Organizers</a>
         </div>
         <div>
           <h4>Stay Connected</h4>
