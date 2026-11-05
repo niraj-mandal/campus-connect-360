@@ -87,6 +87,68 @@ function openService(id) {
 $('#services-grid').addEventListener('click', (e) => { const b = e.target.closest('[data-service]'); if (b) openService(b.dataset.service); });
 
 // ---------- Events ----------
+// ---------- Hero: rotating upcoming-event card ----------
+const heroEvents = (() => {
+  const box = $('#hero-events');
+  const DELAY = 5000;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let i = 0, timer = null, paused = false;
+
+  const slide = (e) => {
+    const { day, month } = dateParts(e.starts_on);
+    return `
+      <div class="he-date"><strong>${day}</strong><span>${month}</span></div>
+      <div class="he-info">
+        <p class="he-eyebrow">Upcoming event</p>
+        <h3><button type="button" class="event-title-btn" data-details="${esc(e.id)}">${esc(e.title)}</button></h3>
+        <p class="he-meta">${icon('i-clock')}${fmtTime(e.start_time)} · ${icon('i-pin')}${esc(e.venue)}</p>
+        <div class="he-foot">
+          <span class="he-seats">${seatsText(e)}</span>
+          <button type="button" class="btn btn-light btn-sm" data-event="${esc(e.id)}"${e.seats_left === 0 ? ' disabled' : ''}>${e.seats_left === 0 ? 'Full' : 'Register'} ${icon('i-arrow')}</button>
+        </div>
+      </div>`;
+  };
+
+  function show(n) {
+    if (!EVENTS.length) return;
+    i = (n + EVENTS.length) % EVENTS.length;
+    const stage = box.querySelector('.he-slide');
+    stage.classList.remove('in');
+    void stage.offsetWidth; // restart the enter animation
+    stage.innerHTML = slide(EVENTS[i]);
+    stage.classList.add('in');
+    box.querySelectorAll('.he-dot').forEach((d, k) => d.setAttribute('aria-current', k === i ? 'true' : 'false'));
+    const bar = box.querySelector('.he-progress');
+    bar.classList.remove('run'); void bar.offsetWidth; if (timer) bar.classList.add('run');
+  }
+  function start() { stop(); if (reduce || paused || EVENTS.length < 2) return; timer = setInterval(() => show(i + 1), DELAY); box.querySelector('.he-progress').classList.add('run'); }
+  function stop() { clearInterval(timer); timer = null; box.querySelector('.he-progress')?.classList.remove('run'); }
+
+  function render() {
+    if (!EVENTS.length) { box.hidden = true; stop(); return; }
+    const keep = EVENTS[i] ? i : 0;
+    box.innerHTML = `
+      <div class="he-slide" aria-live="${reduce ? 'polite' : 'off'}"></div>
+      <div class="he-controls">
+        <div class="he-dots">${EVENTS.map((e, k) => `<button type="button" class="he-dot" data-dot="${k}" aria-label="Show ${esc(e.title)}"></button>`).join('')}</div>
+        <a class="he-all" href="#events">All events</a>
+      </div>
+      <span class="he-progress" style="--d:${DELAY}ms"></span>`;
+    box.hidden = false;
+    show(keep);
+    start();
+  }
+
+  box.addEventListener('click', (e) => { const d = e.target.closest('[data-dot]'); if (d) { show(Number(d.dataset.dot)); start(); } });
+  // Pause while the visitor is looking at or using the card.
+  box.addEventListener('mouseenter', () => { paused = true; stop(); });
+  box.addEventListener('mouseleave', () => { paused = false; start(); });
+  box.addEventListener('focusin', () => { paused = true; stop(); });
+  box.addEventListener('focusout', (e) => { if (!box.contains(e.relatedTarget)) { paused = false; start(); } });
+  document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
+  return { render };
+})();
+
 function seatsText(e) {
   if (e.seats_left === 0) return '<span class="seats-full">Full</span>';
   if (e.seats_left <= Math.max(10, e.capacity * 0.1)) return `<span class="seats-low">${e.seats_left} seats left</span>`;
@@ -130,6 +192,7 @@ async function loadEvents() {
     EVENTS = r.body;
     loadEvents.done = true;
     renderEvents();
+    heroEvents.render();
     if (first && location.hash.startsWith('#evt-')) handleHash();
   } catch {
     $('#event-list').innerHTML = '<li class="event-item"><div class="event-info"><p>Events could not be loaded. <button class="link-btn" type="button" id="events-retry">Try again</button></p></div></li>';
