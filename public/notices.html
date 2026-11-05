@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Notice Board · Campus Connect 360</title>
+  <meta name="description" content="Official campus announcements: exams, deadlines, holidays and library updates.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/components.css">
+  <script>
+    (function () { let t = null; try { t = localStorage.getItem('cc-theme'); } catch (e) {} if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; document.documentElement.dataset.theme = t; })();
+  </script>
+</head>
+<body data-page="notices">
+  <header id="site-header"></header>
+  <main id="main">
+    <section class="page-head">
+      <div class="container">
+        <p class="crumbs"><a href="/">Home</a> / Notices</p>
+        <h1>Notice Board</h1>
+        <p class="lead">Every official announcement in one place. Pinned notices are the ones you shouldn’t miss.</p>
+      </div>
+    </section>
+    <section class="container section">
+      <div class="toolbar">
+        <div class="chips" id="notice-filters" aria-label="Filter by category"></div>
+        <label class="search-field"><svg><use href="#i-search"/></svg><input id="notice-search" type="search" placeholder="Search notices" aria-label="Search notices"></label>
+      </div>
+      <div class="notice-list" id="notice-list" aria-live="polite"></div>
+    </section>
+  </main>
+  <footer id="site-footer"></footer>
+  <script src="/common.js"></script>
+  <script src="/notices.js"></script>
+</body>
+</html>

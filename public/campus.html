@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Campus Map & Hours · Campus Connect 360</title>
+  <meta name="description" content="Campus map with key buildings and live opening hours.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/components.css">
+  <script>
+    (function () { let t = null; try { t = localStorage.getItem('cc-theme'); } catch (e) {} if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; document.documentElement.dataset.theme = t; })();
+  </script>
+</head>
+<body data-page="campus">
+  <header id="site-header"></header>
+  <main id="main">
+    <section class="page-head">
+      <div class="container">
+        <p class="crumbs"><a href="/">Home</a> / Campus Map</p>
+        <h1>Campus Map &amp; Hours</h1>
+        <p class="lead">Find your way around and see what’s open right now. Tap a building for details.</p>
+      </div>
+    </section>
+
+    <section class="container section">
+      <div class="map-wrap">
+        <div class="map-card"><svg class="campus-map" id="campus-map" viewBox="0 0 800 560" role="group" aria-label="Campus map"></svg></div>
+        <aside class="form-card place-panel" id="place-panel" aria-live="polite"></aside>
+      </div>
+    </section>
+
+    <section class="container section" style="padding-top:0" aria-labelledby="hours-title">
+      <div class="section-head">
+        <div><p class="eyebrow">Opening Hours</p><h2 id="hours-title">What’s open</h2></div>
+        <p class="muted" id="now-label" style="margin:0;font-size:13.5px"></p>
+      </div>
+      <div class="table-scroll"><table class="hours-table" id="hours-table"></table></div>
+    </section>
+  </main>
+  <footer id="site-footer"></footer>
+  <script src="/common.js"></script>
+  <script src="/campus.js"></script>
+</body>
+</html>

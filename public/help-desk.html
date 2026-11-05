@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Help Desk · Campus Connect 360</title>
+  <meta name="description" content="Raise a support ticket for hostel, IT, library or fee issues and track it.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/components.css">
+  <script>
+    (function () { let t = null; try { t = localStorage.getItem('cc-theme'); } catch (e) {} if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; document.documentElement.dataset.theme = t; })();
+  </script>
+</head>
+<body data-page="help-desk">
+  <header id="site-header"></header>
+  <main id="main">
+    <section class="page-head">
+      <div class="container">
+        <p class="crumbs"><a href="/">Home</a> / Help Desk</p>
+        <h1>Help Desk</h1>
+        <p class="lead">Hostel repairs, Wi-Fi trouble, fee questions: raise a ticket, get an ID, and follow it until it’s resolved.</p>
+      </div>
+    </section>
+
+    <section class="container section split">
+      <form class="form-card" id="ticket-form" novalidate></form>
+      <div>
+        <form class="form-card" id="track-form" novalidate></form>
+        <div id="track-out"></div>
+      </div>
+    </section>
+
+    <section class="container section" style="padding-top:0" aria-labelledby="qh-title">
+      <div class="section-head"><div><p class="eyebrow">Before you raise a ticket</p><h2 id="qh-title">Quick fixes</h2></div></div>
+      <div class="quick-help">
+        <article class="card"><span class="badge">IT &amp; Wi-Fi</span><h3>Can’t connect to campus Wi-Fi</h3><p>Forget the “Campus-Secure” network, reconnect with your student ID and portal password, and accept the certificate. Still failing? Raise a ticket with your device type.</p></article>
+        <article class="card"><span class="badge">Fees</span><h3>Fee paid but not showing</h3><p>Payments take up to 2 working days to reflect. After that, raise a ticket with the transaction ID and date of payment.</p></article>
+        <article class="card"><span class="badge">Hostel</span><h3>Room repair or electrical fault</h3><p>Raise a Hostel ticket with your block and room number. Electrical and water issues are attended first, usually within 24 hours.</p></article>
+        <article class="card"><span class="badge">Library</span><h3>Late fine or lost book</h3><p>Fines can be paid at the circulation desk. For a lost book, raise a Library ticket before the due date to avoid extra charges.</p></article>
+        <article class="card"><span class="badge">Academics</span><h3>Attendance or marks mismatch</h3><p>Raise an Academics ticket with the course code and the dates or marks in question. Your department office will review it.</p></article>
+        <article class="card"><span class="badge">Urgent</span><h3>Medical or safety emergency</h3><p>Don’t wait for a ticket. Call campus security on Ext. 2000 or go to the Medical Centre, open 24 hours.</p></article>
+      </div>
+    </section>
+  </main>
+  <footer id="site-footer"></footer>
+  <script src="/common.js"></script>
+  <script src="/help-desk.js"></script>
+</body>
+</html>

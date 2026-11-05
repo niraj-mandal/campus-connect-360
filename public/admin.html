@@ -4,69 +4,70 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
-  <title>Organizer Registrations</title>
+  <title>Organizer Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/components.css">
   <script>
-    (function () {
-      let t = null;
-      try { t = localStorage.getItem('cc-theme'); } catch (e) {}
-      if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      document.documentElement.dataset.theme = t;
-    })();
+    (function () { let t = null; try { t = localStorage.getItem('cc-theme'); } catch (e) {} if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; document.documentElement.dataset.theme = t; })();
   </script>
   <style>
-    .admin { padding-block: 40px 64px; }
-    .admin-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+    .admin { padding-block: 32px 64px; }
+    .admin-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
     .admin-head h1 { font-size: clamp(28px, 4vw, 36px); }
     .admin-head p { margin: 8px 0 0; color: var(--muted); font-size: 14px; }
-    .toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-    .toolbar .select-wrap select, .key-form input { height: 40px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); padding: 0 36px 0 14px; font-size: 13px; appearance: none; }
     .key-form { max-width: 420px; margin: 60px auto; }
     .key-form .reg-card { display: grid; gap: 14px; }
-    .key-form input { width: 100%; padding-right: 14px; }
+    .key-form input { width: 100%; height: 40px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); padding: 0 14px; font-size: 13px; }
     .key-form p { margin: 0; color: var(--muted); font-size: 13px; }
-    .summary { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
-    .chip { background: var(--surface-2); border-radius: 999px; padding: 6px 14px; font-size: 12.5px; }
-    .chip b { font-variant-numeric: tabular-nums; }
+    .panel-tools { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .panel-tools .select-wrap select { height: 38px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); padding: 0 36px 0 12px; font-size: 13px; appearance: none; }
+    .summary { display: flex; gap: 8px; flex-wrap: wrap; }
+    .pill { background: var(--surface-2); border-radius: 999px; padding: 6px 12px; font-size: 12.5px; }
+    .pill b { font-variant-numeric: tabular-nums; }
     .table-wrap { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 720px; }
-    th, td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--line); white-space: nowrap; }
-    th { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; }
-    tbody tr:last-child td { border-bottom: 0; }
-    tbody tr:hover { background: var(--surface-2); }
-    td.mono { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-size: 12px; }
-    .del { border: 0; background: none; color: var(--error); cursor: pointer; font-size: 12.5px; font-weight: 600; padding: 4px 8px; border-radius: 6px; }
-    .del:hover { background: color-mix(in srgb, var(--error) 12%, transparent); }
+    table.data { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 760px; }
+    table.data th, table.data td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    table.data th { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; white-space: nowrap; }
+    table.data tbody tr:last-child td { border-bottom: 0; }
+    table.data tbody tr:hover { background: var(--surface-2); }
+    table.data td.mono { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-size: 12px; white-space: nowrap; }
+    table.data td.wrap { max-width: 340px; white-space: pre-line; }
+    table.data td.nowrap { white-space: nowrap; }
+    .row-actions { display: flex; gap: 4px; flex-wrap: wrap; }
+    .act { border: 0; background: none; cursor: pointer; font-size: 12.5px; font-weight: 600; padding: 4px 8px; border-radius: 6px; color: var(--text); white-space: nowrap; }
+    .act:hover { background: var(--surface-2); }
+    .act.danger { color: var(--error); }
+    .act.danger:hover { background: color-mix(in srgb, var(--error) 12%, transparent); }
     .empty { padding: 40px 16px; text-align: center; color: var(--muted); font-size: 14px; }
-    .btn-outline { background: transparent; border: 1px solid var(--line); color: var(--text); }
+    .add-card { margin-bottom: 18px; }
+    .add-card summary { cursor: pointer; font-weight: 600; font-size: 14px; padding: 4px 0; }
+    .add-card[open] summary { margin-bottom: 14px; }
+    .check { display: flex; gap: 8px; align-items: center; font-size: 13px; }
+    .storage-warn { background: var(--warn-bg); color: var(--warn); border-radius: 10px; padding: 10px 14px; font-size: 13px; margin-bottom: 16px; }
   </style>
 </head>
-<body>
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-    <symbol id="logo" viewBox="0 0 40 24"><ellipse cx="13" cy="12" rx="9.5" ry="8" transform="rotate(-28 13 12)" fill="none" stroke="currentColor" stroke-width="2.8"/><ellipse cx="27" cy="12" rx="9.5" ry="8" transform="rotate(-28 27 12)" fill="none" stroke="currentColor" stroke-width="2.8"/></symbol>
-  </svg>
-
-  <header class="site-header">
+<body data-page="admin">
+  <header id="site-header" class="site-header" data-static="1">
     <div class="container header-inner">
       <a class="brand" href="/"><svg class="brand-logo"><use href="#logo"/></svg><span>Campus Connect 360</span></a>
       <div class="header-actions">
+        <button class="icon-btn" id="theme-toggle" aria-label="Toggle dark mode"><svg><use href="#i-moon"/></svg></button>
         <button class="btn btn-sm btn-outline" id="sign-out" hidden>Sign out</button>
       </div>
     </div>
   </header>
 
-  <main class="container admin">
+  <main class="container admin" id="main">
     <section class="key-form" id="key-view" hidden>
       <form class="reg-card" id="key-form">
         <h3>Organizer access</h3>
-        <p>Enter the organizer key to view event registrations.</p>
-        <input id="key-input" type="password" placeholder="Organizer key" autocomplete="current-password" required>
+        <p>Enter the organizer key to manage events, notices, clubs, posts, tickets and messages.</p>
+        <input id="key-input" type="password" placeholder="Organizer key" autocomplete="current-password" required aria-label="Organizer key">
         <small class="error" id="key-error" aria-live="polite"></small>
-        <button class="btn btn-dark btn-block" type="submit">View registrations</button>
+        <button class="btn btn-dark btn-block" type="submit">Sign in</button>
       </form>
     </section>
 
@@ -74,28 +75,18 @@
       <div class="admin-head">
         <div>
           <p class="eyebrow">Organizer</p>
-          <h1>Event Registrations</h1>
+          <h1>Dashboard</h1>
           <p id="updated"></p>
         </div>
-        <div class="toolbar">
-          <div class="select-wrap">
-            <select id="filter" aria-label="Filter by event"><option value="">All events</option></select>
-            <svg><use href="#i-chevron"/></svg>
-          </div>
-          <button class="btn btn-sm btn-outline" id="refresh">Refresh</button>
-          <button class="btn btn-sm btn-dark" id="export">Export CSV</button>
-        </div>
+        <button class="btn btn-sm btn-outline" id="refresh">Refresh</button>
       </div>
-      <div class="summary" id="summary"></div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Confirmation</th><th>Name</th><th>Reg. No.</th><th>Email</th><th>Event</th><th>Registered</th><th></th></tr></thead>
-          <tbody id="rows"></tbody>
-        </table>
-      </div>
+      <div id="storage-note"></div>
+      <div class="tabs" role="tablist" aria-label="Sections" id="tabs"></div>
+      <div id="panel" role="tabpanel"></div>
     </section>
   </main>
 
-  <script src="admin.js"></script>
+  <script src="/common.js"></script>
+  <script src="/admin.js"></script>
 </body>
 </html>

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lost & Found · Campus Connect 360</title>
+  <meta name="description" content="Report lost or found items on campus and reach the poster safely.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/components.css">
+  <script>
+    (function () { let t = null; try { t = localStorage.getItem('cc-theme'); } catch (e) {} if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; document.documentElement.dataset.theme = t; })();
+  </script>
+</head>
+<body data-page="lost-found">
+  <header id="site-header"></header>
+  <main id="main">
+    <section class="page-head">
+      <div class="container">
+        <p class="crumbs"><a href="/">Home</a> / Lost &amp; Found</p>
+        <h1>Lost &amp; Found</h1>
+        <p class="lead">Lost something, or found something that isn’t yours? Post it here. Replies reach the poster without anyone seeing their email.</p>
+        <div class="btn-row">
+          <button class="btn btn-dark btn-sm" type="button" data-report="lost"><svg><use href="#i-plus"/></svg> Report a lost item</button>
+          <button class="btn btn-outline btn-sm" type="button" data-report="found"><svg><use href="#i-plus"/></svg> Report a found item</button>
+          <button class="link-btn" type="button" id="manage-post" style="font-size:13.5px;margin-left:6px">Manage my post</button>
+        </div>
+      </div>
+    </section>
+    <section class="container section">
+      <div class="toolbar">
+        <div class="chips" id="lf-filters" aria-label="Filter posts"></div>
+        <label class="search-field"><svg><use href="#i-search"/></svg><input id="lf-search" type="search" placeholder="Search items or places" aria-label="Search lost and found"></label>
+      </div>
+      <div class="card-grid" id="lf-grid" aria-live="polite"></div>
+    </section>
+  </main>
+  <footer id="site-footer"></footer>
+  <script src="/common.js"></script>
+  <script src="/lost-found.js"></script>
+</body>
+</html>

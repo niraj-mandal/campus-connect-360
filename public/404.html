@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Page not found · Campus Connect 360</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/components.css">
+  <script>
+    (function () { let t = null; try { t = localStorage.getItem('cc-theme'); } catch (e) {} if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; document.documentElement.dataset.theme = t; })();
+  </script>
+</head>
+<body data-page="404">
+  <header id="site-header"></header>
+  <main id="main" class="not-found">
+    <div>
+      <h1>404</h1>
+      <p>We couldn’t find that page. It may have moved.</p>
+      <div class="btn-row" style="justify-content:center;margin-top:20px">
+        <a class="btn btn-dark btn-sm" href="/">Go home</a>
+        <button class="btn btn-outline btn-sm" type="button" data-action="assistant">Search the campus</button>
+      </div>
+    </div>
+  </main>
+  <footer id="site-footer"></footer>
+  <script src="/common.js"></script>
+</body>
+</html>
