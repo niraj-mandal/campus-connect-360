@@ -26,7 +26,7 @@ Every page has search (press `/`), dark mode, and a phone layout.
 ## Data
 
 - Database: `data/campus.db` (SQLite, created on first run and seeded with 3 events, 12 clubs and 4 notices). Older databases are upgraded in place.
-- Set `DATABASE_URL` to use Postgres instead (needs `npm install pg`).
+- Set `DATABASE_URL` to use Postgres instead (run `npm install` once for the `pg` driver).
 - Organizer key: set `ADMIN_KEY`. Without it, a key is generated once and saved to `data/admin-key.txt`.
 - `data/` is git-ignored. Back it up; it holds every registration, ticket and message.
 
@@ -51,6 +51,17 @@ Public: `GET /api/events | stats | notices | clubs | lost-found | health`, `POST
 
 Organizer (`Authorization: Bearer <ADMIN_KEY>`): everything under `/api/admin/` (overview, registrations + CSV, events, notices, club-requests, lost-found, tickets, messages).
 
-## Deploying
+## Deploying to Vercel
 
-Not set up yet. Any host with a long-lived Node process and a persistent disk works as is (Render, Railway, Fly.io, a VPS): set `ADMIN_KEY` and point `DATA_DIR` at the volume. Serverless hosts (Vercel) need `DATABASE_URL` pointing at Postgres, because their disk is wiped.
+`vercel.json` serves `public/` as static pages (clean URLs: `/clubs` → `clubs.html`) and rewrites every `/api/*` request to one function, `api/index.js`.
+
+In the Vercel project, set two things, then redeploy:
+
+1. **Database:** Storage → Create Database → Neon (Postgres) → connect it to this project. This adds `DATABASE_URL`. Tables and starter content are created on the first request.
+2. **Organizer key:** Settings → Environment Variables → `ADMIN_KEY` = a long random string (for example the output of `node -e "console.log(require('crypto').randomBytes(24).toString('base64url'))"`).
+
+Without `DATABASE_URL` the site still works but stores data in temporary storage that Vercel wipes; the organizer page shows a warning. Without `ADMIN_KEY` the organizer page is locked with a message saying so.
+
+`GET /api/health` reports `storage` (`postgres` or `sqlite`), `temporary` and `admin` (whether a key is set) to check a deployment.
+
+Other hosts with a persistent disk (Render, Railway, Fly.io, a VPS) work with `npm start`: set `ADMIN_KEY` and point `DATA_DIR` at the volume.
